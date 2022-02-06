@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
-  void answerQuestion() {
+  void _answerQuestion() {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -28,9 +29,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'What\'s your favorite color?',
-      'What\'s your favorite animal?'
+    List questions = [
+      {
+        'questionText': 'What\'s your favorite color?',
+        'answers': ['Black', 'Red', 'White'],
+      },
+      {
+        'questionText': 'What\'s your favorite animal?',
+        'answers': ['Dog', 'Cat', 'Whale', 'Rabbit'],
+      },
+      {
+        'questionText': 'Birth month?',
+        'answers': ['1', '2', '3', 'other'],
+      },
     ];
     return MaterialApp(
       home: Scaffold(
@@ -41,7 +52,15 @@ class _MyAppState extends State<MyApp> {
           children: [
             //혹은 Text(questions.elementAt(0)),
             //Text(questions[_questionIndex]),
-            Question(questions[_questionIndex]),
+
+            Question(
+              questions[_questionIndex]['questionText'],
+            ),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
+            /*
             ElevatedButton(
               onPressed: null,
               child: Text('Answer 1'),
@@ -51,13 +70,15 @@ class _MyAppState extends State<MyApp> {
               child: Text('Answer 2'),
             ),
             ElevatedButton(
-              onPressed: answerQuestion,
+              onPressed: _answerQuestion,
               child: Text('Answer 3'),
             ),
             ElevatedButton(
               onPressed: () => print('Answer 4 chosen!'),
               child: Text('Answer 4'),
             ),
+            Answer(_answerQuestion),
+            */
           ],
         ),
       ),
