@@ -17,50 +17,54 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final List questions = const [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Black', 'Red', 'White'],
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Dog', 'Cat', 'Whale', 'Rabbit'],
+    },
+    {
+      'questionText': 'Birth month?',
+      'answers': ['1', '2', '3', 'other'],
+    },
+  ];
   var _questionIndex = 0;
 
   void _answerQuestion() {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-
     print(_questionIndex);
+    if (_questionIndex < questions.length) {
+      print('We have more questions!');
+    } else
+      print('No more questions!');
   }
 
   @override
   Widget build(BuildContext context) {
-    List questions = [
-      {
-        'questionText': 'What\'s your favorite color?',
-        'answers': ['Black', 'Red', 'White'],
-      },
-      {
-        'questionText': 'What\'s your favorite animal?',
-        'answers': ['Dog', 'Cat', 'Whale', 'Rabbit'],
-      },
-      {
-        'questionText': 'Birth month?',
-        'answers': ['1', '2', '3', 'other'],
-      },
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First app'),
         ),
-        body: Column(
-          children: [
-            //혹은 Text(questions.elementAt(0)),
-            //Text(questions[_questionIndex]),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: [
+                  //혹은 Text(questions.elementAt(0)),
+                  //Text(questions[_questionIndex]),
 
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-            /*
+                  Question(
+                    questions[_questionIndex]['questionText'],
+                  ),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList()
+                  /*
             ElevatedButton(
               onPressed: null,
               child: Text('Answer 1'),
@@ -79,8 +83,11 @@ class _MyAppState extends State<MyApp> {
             ),
             Answer(_answerQuestion),
             */
-          ],
-        ),
+                ],
+              )
+            : Center(
+                child: Text('You did it!'),
+              ),
       ),
     );
   }
